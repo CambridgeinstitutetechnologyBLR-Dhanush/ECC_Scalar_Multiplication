@@ -23,7 +23,7 @@ module tt_um_ecc_scalar_mult (
     if (!rst_n)
       result <= 8'd0;
     else
-      result <= ui_in * uio_in;
+      result <= ui_in + uio_in;
   end
 
   // Output result
