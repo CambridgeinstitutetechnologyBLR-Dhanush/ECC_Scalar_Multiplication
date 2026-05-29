@@ -3,14 +3,12 @@
 
 module tb_tt_um_ecc_scalar_mult ();
 
-  // Dump the signals to a waveform file
   initial begin
     $dumpfile("tb.fst");
     $dumpvars(0, tb_tt_um_ecc_scalar_mult);
     #1;
   end
 
-  // DUT signals
   reg clk;
   reg rst_n;
   reg ena;
@@ -26,7 +24,12 @@ module tb_tt_um_ecc_scalar_mult ();
   wire VGND = 1'b0;
 `endif
 
-  // Instantiate ECC Scalar Multiplication DUT
+  // Clock generation
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+  end
+
   tt_um_ecc_scalar_mult dut (
 
 `ifdef GL_TEST
