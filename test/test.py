@@ -33,7 +33,7 @@ async def test_project(dut):
 
     await ClockCycles(dut.clk, 1)
 
-    assert int(dut.uo_out.value) == 15
+    assert int(dut.dut.uo_out.value) == 15
 
     # Test Case 2
     dut.ui_in.value = 10
@@ -41,7 +41,7 @@ async def test_project(dut):
 
     await ClockCycles(dut.clk, 1)
 
-    assert int(dut.uo_out.value) == 40
+    assert int(dut.dut.uo_out.value) == 40
 
     # Test Case 3
     dut.ui_in.value = 20
@@ -50,6 +50,6 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 1)
 
     # 20 × 30 = 600 → 600 mod 256 = 88
-    assert int(dut.uo_out.value) == 88
+    assert int(dut.dut.uo_out.value) == 88
 
     dut._log.info("ECC Scalar Multiplication Test Passed")
