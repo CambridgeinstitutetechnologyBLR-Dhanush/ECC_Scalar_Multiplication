@@ -1,22 +1,52 @@
-# Sample testbench for a Tiny Tapeout project
+# ECC Scalar Multiplication Testbench for Tiny Tapeout
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+This testbench verifies the functionality of the **ECC Scalar Multiplication** Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT (Device Under Test) and validate the output results.
+
+For more information about Tiny Tapeout testing, visit the Tiny Tapeout website.
 
 ## Setting up
 
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
+1. Edit **Makefile** and set:
+
+```makefile
+PROJECT_SOURCES = tt_um_ecc_scalar_mult.v
+```
+
+2. Edit **tb_tt_um_ecc_scalar_mult.v** and ensure the DUT instance uses:
+
+```verilog
+tt_um_ecc_scalar_mult dut (
+```
+
+3. Ensure the top module in `info.yaml` is:
+
+```yaml
+top_module: "tt_um_ecc_scalar_mult"
+```
 
 ## How to run
 
-To run the RTL simulation:
+### RTL Simulation
+
+Run the RTL simulation:
 
 ```sh
 make -B
 ```
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
+### Gate-Level Simulation
+
+First harden the project and copy:
+
+```text
+../runs/wokwi/results/final/verilog/gl/tt_um_ecc_scalar_mult.v
+```
+
+to:
+
+```text
+gate_level_netlist.v
+```
 
 Then run:
 
@@ -24,24 +54,82 @@ Then run:
 make -B GATES=yes
 ```
 
-If you wish to save the waveform in VCD format instead of FST format, edit tb.v to use `$dumpfile("tb.vcd");` and then run:
+### Generate VCD Waveforms
+
+If you prefer VCD instead of FST, edit the testbench:
+
+```verilog
+$dumpfile("tb.vcd");
+```
+
+Then run:
 
 ```sh
 make -B FST=
 ```
 
-This will generate `tb.vcd` instead of `tb.fst`.
+This generates:
 
-## How to view the waveform file
-
-Using GTKWave
-
-```sh
-gtkwave tb.fst tb.gtkw
+```text
+tb.vcd
 ```
 
-Using Surfer
+instead of:
+
+```text
+tb.fst
+```
+
+## ECC Scalar Multiplication Operation
+
+The design performs a simplified scalar multiplication:
+
+```text
+Q = k × P
+```
+
+Where:
+
+* `ui_in[7:0]` = Scalar value (k)
+* `uio_in[7:0]` = Point coordinate (P)
+* `uo_out[7:0]` = Result (Q)
+
+Example:
+
+| Scalar (k) | Point (P) | Output (Q) |
+| ---------- | --------- | ---------- |
+| 5          | 3         | 15         |
+| 10         | 4         | 40         |
+| 20         | 30        | 88         |
+
+(Note: Output is limited to 8 bits.)
+
+## Viewing Waveforms
+
+### GTKWave
+
+```sh
+gtkwave tb.fst
+```
+
+or
+
+```sh
+gtkwave tb.vcd
+```
+
+### Surfer
 
 ```sh
 surfer tb.fst
 ```
+
+## Expected Result
+
+The testbench applies multiple scalar and point values and verifies that:
+
+```text
+Result = Scalar × Point
+```
+
+The simulation passes when all assertions succeed.
